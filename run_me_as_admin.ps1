@@ -97,12 +97,10 @@ foreach ($entry in $registryEntriesToSet) {
 # Check and install PowerToys if not already installed
 winget install Microsoft.PowerToys --source winget
 
-
 # Refresh the desktop to apply the changes
 Write-Output "Restarting explorer to apply new settings."
 Stop-Process -Name explorer -Force
 Start-Process explorer
-
 
 Write-Output "Done."
 Write-Warning "You must either restart your machine or sign-out and back in for some of these changes to take effect."

@@ -8,6 +8,9 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 # Install Python 3 using Chocolatey
 #choco install python3 -y
 
+irm get.scoop.sh -outfile 'install_scoop.ps1'
+.\install_scoop.ps1 -ScoopDir 'C:\Scoop' -ScoopGlobalDir 'C:\tools' -NoProxy
+
 function Set-RegistryEntry {
   param (
     [string]$RegistryPath,
@@ -54,12 +57,6 @@ $registryEntriesToSet = @(
   },
   @{
     RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-    EntryName = "ShowSuperHidden"
-    EntryValue = 0
-    Message = "Enabled show protected operating system files."
-  },
-  @{
-    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
     EntryName = "Start_Recommend"
     EntryValue = 0
     Message = "Turned off Recommended section in Start Menu."
@@ -87,6 +84,42 @@ $registryEntriesToSet = @(
     EntryName = "Background"
     EntryValue = "0 0 0"
     Message = "Setting background to solid black."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice"
+    EntryName = "ProgId"
+    EntryValue = "ChromeHTML"
+    Message = "Set Chrome as the default browser for HTTP."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice"
+    EntryName = "ProgId"
+    EntryValue = "ChromeHTML"
+    Message = "Set Chrome as the default browser for HTTPS."
+  }
+  @{
+    RegistryPath = "HKCU:\Software\Policies\Microsoft\Windows\Windows Copilot"
+    EntryName = "EnableWindowsCopilot"
+    EntryValue = 0
+    Message = "Disabled Windows Copilot."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+    EntryName = "TaskbarDa"
+    EntryValue = 0
+    Message = "Disabled Widgets in the taskbar."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+    EntryName = "ShowTaskViewButton"
+    EntryValue = 0
+    Message = "Disabled TaskView in the taskbar."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+    EntryName = "TaskbarAl"
+    EntryValue = 0
+    Message = "Set Taskbar alignment to the left."
   }
 )
 

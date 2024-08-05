@@ -14,36 +14,68 @@ TOOLS_DIRECTORY = DRIVE + PATH_SEPERATOR + "tools";
 class ToolToInstall:
     name: str
     install_args: str = ""
-    install_with: str = "choco install"
-    upgrade_with: str = "choco upgrade"
-    message: str = ""
+    install_with: str = "scoop install -g"
+    upgrade_with: str = "scoop update -g"
     priority: int = 1 # Lower gets installed first
 
 # Create the desired directory for our tools
 Path(TOOLS_DIRECTORY).mkdir(parents=True, exist_ok=True);
 
+command = f"scoop bucket add extras"
+subprocess.run(command, shell=True, check=True)
+
+command = f"scoop bucket add nonportable"
+subprocess.run(command, shell=True, check=True)
+
+command = f"scoop bucket add games"
+subprocess.run(command, shell=True, check=True)
+
 # List of tools to install
 tools_to_install = [
+  # Development / Tools
+  ToolToInstall(name="7zip"),
+  ToolToInstall(name="cmake"),
   ToolToInstall(name="composer"),
   ToolToInstall(name="ctags"),
+  ToolToInstall(name="cyberduck"),
+  ToolToInstall(name="everything"),
   ToolToInstall(name="fd"),
   ToolToInstall(name="ffmpeg"),
   ToolToInstall(name="fzf"),
-  ToolToInstall(name="lazygit"),
+  ToolToInstall(name="git"),
+  ToolToInstall(name="googlechrome"),
+  ToolToInstall(name="lazygit", priority=5),
   ToolToInstall(name="lua"),
   ToolToInstall(name="luarocks", priority=5),
-  ToolToInstall(name="ninja"),
-  ToolToInstall(name="nodejs.install"),
-  ToolToInstall(name="php"),
-  ToolToInstall(name="ripgrep"),
-  ToolToInstall(name="sqlite"),
-  ToolToInstall(name="vlc"),
-  ToolToInstall(name="zig"),
+  ToolToInstall(name="neovide-nightly"),
   ToolToInstall(name="neovim"),
-  ToolToInstall(name="neovide"),
-  ToolToInstall(name="visualstudio2019community"),
+  ToolToInstall(name="ninja", priority=5),
+  ToolToInstall(name="nodejs"),
+  ToolToInstall(name="php"),
+  ToolToInstall(name="postman"),
+  ToolToInstall(name="ripgrep"),
   ToolToInstall(name="ruby"),
+  ToolToInstall(name="sqlite"),
+  ToolToInstall(name="streamdeck"),
+  ToolToInstall(name="tableplus"),
+  ToolToInstall(name="teracopy-np"),
+  ToolToInstall(name="visualstudio2019community", install_with="choco install", upgrade_with="choco upgrade"),
+  ToolToInstall(name="vlc"),
   ToolToInstall(name="windirstat"),
+  ToolToInstall(name="windows-terminal"),
+  ToolToInstall(name="wp-cli"),
+  ToolToInstall(name="zig"),
+
+  # Chat 
+  ToolToInstall(name="discord"),
+  ToolToInstall(name="signal"),
+  ToolToInstall(name="slack"),
+  ToolToInstall(name="zoom"),
+
+  # Entertainment
+  ToolToInstall(name="goggalaxy"),
+  ToolToInstall(name="spotify"),
+  ToolToInstall(name="steam"),
 ]
 
 def is_tool_installed(tool_name):
@@ -57,7 +89,6 @@ def is_tool_installed(tool_name):
 def install_tool(tool):
     """Install a tool using the specified method."""
     if not is_tool_installed(tool.name):
-        print(f"{tool.message}")
         command = f"{tool.install_with} {tool.name} {tool.install_args}"
         subprocess.run(command, shell=True, check=True)
         print(f"{tool.name} has been installed.")

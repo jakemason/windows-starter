@@ -14,12 +14,17 @@ TOOLS_DIRECTORY = DRIVE + PATH_SEPERATOR + "tools";
 class ToolToInstall:
     name: str
     install_args: str = ""
+    # scoop is the default install tool because it allows us to actually
+    # pick where we want our tools to be installed
     install_with: str = "scoop install -g"
     upgrade_with: str = "scoop update -g"
     priority: int = 1 # Lower gets installed first
 
 # Create the desired directory for our tools
 Path(TOOLS_DIRECTORY).mkdir(parents=True, exist_ok=True);
+
+# git has to be installed first in order to use "scoop bucket"
+ToolToInstall(name="git")
 
 command = f"scoop bucket add extras"
 subprocess.run(command, shell=True, check=True)
@@ -42,7 +47,6 @@ tools_to_install = [
   ToolToInstall(name="fd"),
   ToolToInstall(name="ffmpeg"),
   ToolToInstall(name="fzf"),
-  ToolToInstall(name="git"),
   ToolToInstall(name="googlechrome"),
   ToolToInstall(name="lazygit", priority=5),
   ToolToInstall(name="lua"),

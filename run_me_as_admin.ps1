@@ -7,7 +7,7 @@ Start-Process -FilePath PowerShell -ArgumentList "-NoProfile -ExecutionPolicy By
 
 # Install scoop
 irm get.scoop.sh -outfile 'install_scoop.ps1'
-.\install_scoop.ps1 -ScoopDir 'C:\scoop' -ScoopGlobalDir 'C:\tools' -NoProxy
+.\install_scoop.ps1 -RunAsAdmin -ScoopDir 'C:\scoop' -ScoopGlobalDir 'C:\tools' -NoProxy
 
 scoop install python
 
@@ -78,6 +78,24 @@ $registryEntriesToSet = @(
     EntryName = "MenuShowDelay"
     EntryValue = 0
     Message = "Set MenuShowDelay to 0 for instant menu display."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
+    EntryName = "AppsUseLightTheme"
+    EntryValue = 0
+    Message = "Enabled dark mode for apps."
+  },
+  @{
+    RegistryPath = "HKCU:\Control Panel\Desktop"
+    EntryName = "WallPaper"
+    EntryValue = ""
+    Message = "Setting background to solid black." 
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers"
+    EntryName = "BackgroundType"
+    EntryValue = 1
+    Message = "Set background type to be solid color." 
   },
   @{
     RegistryPath = "HKCU:\Control Panel\Colors"

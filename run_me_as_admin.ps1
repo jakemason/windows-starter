@@ -3,13 +3,13 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
 
 # Install Chocolatey
-#Start-Process -FilePath PowerShell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Wait
+Start-Process -FilePath PowerShell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" -Wait
 
-# Install Python 3 using Chocolatey
-#choco install python3 -y
-
+# Install scoop
 irm get.scoop.sh -outfile 'install_scoop.ps1'
-.\install_scoop.ps1 -ScoopDir 'C:\Scoop' -ScoopGlobalDir 'C:\tools' -NoProxy
+.\install_scoop.ps1 -ScoopDir 'C:\scoop' -ScoopGlobalDir 'C:\tools' -NoProxy
+
+scoop install python
 
 function Set-RegistryEntry {
   param (
@@ -83,7 +83,7 @@ $registryEntriesToSet = @(
     RegistryPath = "HKCU:\Control Panel\Colors"
     EntryName = "Background"
     EntryValue = "0 0 0"
-    Message = "Setting background to solid black."
+    Message = "Setting background to solid black." 
   },
   @{
     RegistryPath = "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice"
@@ -136,4 +136,4 @@ Stop-Process -Name explorer -Force
 Start-Process explorer
 
 Write-Output "Done."
-Write-Warning "You must either restart your machine or sign-out and back in for some of these changes to take effect."
+Write-Warning "You must either restart your machine or sign-out and back in for some of these changes to take effect. This is a requirement by Windows, there's no way around it."

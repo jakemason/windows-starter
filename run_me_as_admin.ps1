@@ -86,6 +86,12 @@ $registryEntriesToSet = @(
     Message = "Enabled dark mode for apps."
   },
   @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
+    EntryName = "SystemUsesLightTheme"
+    EntryValue = 0
+    Message = "Enabled dark mode for the system."
+  },
+  @{
     RegistryPath = "HKCU:\Control Panel\Desktop"
     EntryName = "WallPaper"
     EntryValue = ""
@@ -138,6 +144,12 @@ $registryEntriesToSet = @(
     EntryName = "TaskbarAl"
     EntryValue = 0
     Message = "Set Taskbar alignment to the left."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"
+    EntryName = ""
+    EntryValue = ""
+    Message = "Enabled classic context menu in Windows 11."
   }
 )
 

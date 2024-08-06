@@ -24,7 +24,8 @@ class ToolToInstall:
 Path(TOOLS_DIRECTORY).mkdir(parents=True, exist_ok=True);
 
 # git has to be installed first in order to use "scoop bucket"
-ToolToInstall(name="git")
+command = f"scoop install git"
+subprocess.run(command, shell=True, check=True)
 
 command = f"scoop bucket add extras"
 subprocess.run(command, shell=True, check=True)
@@ -48,6 +49,7 @@ tools_to_install = [
   ToolToInstall(name="ffmpeg"),
   ToolToInstall(name="fzf"),
   ToolToInstall(name="googlechrome"),
+  ToolToInstall(name="greenshot"),
   ToolToInstall(name="lazygit", priority=5),
   ToolToInstall(name="lua"),
   ToolToInstall(name="luarocks", priority=5),
@@ -61,6 +63,7 @@ tools_to_install = [
   ToolToInstall(name="ruby"),
   ToolToInstall(name="sqlite"),
   ToolToInstall(name="streamdeck"),
+  ToolToInstall(name="streamlabs-obs"),
   ToolToInstall(name="tableplus"),
   ToolToInstall(name="teracopy-np"),
   ToolToInstall(name="visualstudio2019community", install_with="choco install -y", upgrade_with="choco upgrade -y"),
@@ -85,14 +88,6 @@ tools_to_install = [
   ToolToInstall(name="steam"),
 ]
 
-def is_tool_installed(tool_name):
-    """Check if a tool is already installed."""
-    try:
-        result = subprocess.run(["where", tool_name], capture_output=True, text=True, check=True)
-        return result.returncode == 0
-    except subprocess.CalledProcessError:
-        return False
-
 def install_tool(tool):
     """Install a tool using the specified method."""
     if not is_tool_installed(tool.name):
@@ -110,3 +105,34 @@ tools_to_install.sort(key=lambda x: x.priority)
 # Install each tool
 for tool in tools_to_install:
     install_tool(tool)
+
+def add_to_path(new_path):
+    current_path = os.environ['PATH']
+    
+    if new_path not in current_path:
+        updated_path = f"{new_path};{current_path}"
+        os.environ['PATH'] = updated_path
+        subprocess.run(['setx', 'PATH', updated_path], shell=True)
+        
+        print(f"Successfully added {new_path} to PATH.")
+    else:
+        print(f"{new_path} is already in PATH.")
+
+def is_tool_installed(tool_name):
+    """Check if a tool is already installed."""
+    try:
+        result = subprocess.run(["where", tool_name], capture_output=True, text=True, check=True)
+        return result.returncode == 0
+    except subprocess.CalledProcessError:
+        return False
+
+directories_to_add = [
+    # Visual Studio 2019 Windows SDK required for building C++ projects: "mt.exe", "rd.exe", etc
+    r"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\um\x64",
+    r"C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64",
+    # Visual Studio 2019 directory for the compiler: "cl.exe"
+    r"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64",
+]
+
+for directory in directories_to_add:
+    add_to_path(directory)

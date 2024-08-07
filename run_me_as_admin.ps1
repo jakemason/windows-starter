@@ -11,6 +11,55 @@ irm get.scoop.sh -outfile 'install_scoop.ps1'
 
 scoop install python
 
+# List of pre-installed apps to remove
+$appsToRemove = @(
+    "Microsoft.3DBuilder",
+    "Microsoft.BingWeather",
+    "Microsoft.GetHelp",
+    "Microsoft.Getstarted",
+    "Microsoft.MicrosoftOfficeHub",
+    "Microsoft.MicrosoftSolitaireCollection",
+    # "Microsoft.MicrosoftStickyNotes",
+    # "Microsoft.MSPaint",
+    "Microsoft.OneNote",
+    "Microsoft.People",
+    "Microsoft.SkypeApp",
+    "Microsoft.StorePurchaseApp",
+    "Microsoft.Wallet",
+    "Microsoft.Windows.Photos",
+    "Microsoft.WindowsAlarms",
+    "Microsoft.WindowsCamera",
+    "Microsoft.WindowsFeedbackHub",
+    "Microsoft.WindowsMaps",
+    "Microsoft.WindowsSoundRecorder",
+    "Microsoft.Xbox.TCUI",
+    "Microsoft.XboxApp",
+    "Microsoft.XboxGameOverlay",
+    "Microsoft.XboxGamingOverlay",
+    "Microsoft.XboxIdentityProvider",
+    "Microsoft.XboxSpeechToTextOverlay",
+    "Microsoft.YourPhone",
+    "Microsoft.ZuneMusic",
+    "Microsoft.ZuneVideo"
+)
+
+function Remove-App {
+    param (
+        [string]$appName
+    )
+    $appPackage = Get-AppxPackage -Name $appName -ErrorAction SilentlyContinue
+    if ($appPackage) {
+        Remove-AppxPackage -Package $appPackage.PackageFullName
+        Write-Output "Removed $appName."
+    } else {
+        Write-Output "$appName not found."
+    }
+}
+
+foreach ($app in $appsToRemove) {
+    Remove-App -appName $app
+}
+
 function Set-RegistryEntry {
   param (
     [string]$RegistryPath,
@@ -167,3 +216,5 @@ Start-Process explorer
 
 Write-Output "Done."
 Write-Warning "You must either restart your machine or sign-out and back in for some of these changes to take effect. This is a requirement by Windows, there's no way around it."
+
+python start.py

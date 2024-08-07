@@ -67,9 +67,7 @@ tools_to_install = [
   ToolToInstall(name="tableplus"),
   ToolToInstall(name="teracopy-np"),
   ToolToInstall(name="visualstudio2019community", install_with="choco install -y", upgrade_with="choco upgrade -y"),
-  ToolToInstall(name="visualstudio2019buildtools", install_with="choco install -y", 
-                        upgrade_with="choco upgrade -y",
-                        install_args="--params \"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.18362 --add Maicrosoft.VisualStudio.Component.Windows10SDK.19041 --includeRecommended --includeOptional\""),
+  ToolToInstall(name="visualstudio2019buildtools", install_with="choco install -y", upgrade_with="choco upgrade -y", install_args="--params \"--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.18362 --add Maicrosoft.VisualStudio.Component.Windows10SDK.19041 --includeRecommended --includeOptional\"", priority=5),
   ToolToInstall(name="vlc"),
   ToolToInstall(name="windirstat"),
   ToolToInstall(name="windows-terminal"),
@@ -87,24 +85,6 @@ tools_to_install = [
   ToolToInstall(name="spotify"),
   ToolToInstall(name="steam"),
 ]
-
-def install_tool(tool):
-    """Install a tool using the specified method."""
-    if not is_tool_installed(tool.name):
-        command = f"{tool.install_with} {tool.name} {tool.install_args}"
-        subprocess.run(command, shell=True, check=True)
-        print(f"{tool.name} has been installed.")
-    else:
-        print(f"Updating {tool.name}.")
-        command = f"{tool.upgrade_with} {tool.name} {tool.install_args}"
-        subprocess.run(command, shell=True, check=True)
-
-# Sort tools by priority
-tools_to_install.sort(key=lambda x: x.priority)
-
-# Install each tool
-for tool in tools_to_install:
-    install_tool(tool)
 
 def add_to_path(new_path):
     current_path = os.environ['PATH']
@@ -125,6 +105,24 @@ def is_tool_installed(tool_name):
         return result.returncode == 0
     except subprocess.CalledProcessError:
         return False
+
+def install_tool(tool):
+    """Install a tool using the specified method."""
+    if not is_tool_installed(tool.name):
+        command = f"{tool.install_with} {tool.name} {tool.install_args}"
+        subprocess.run(command, shell=True, check=True)
+        print(f"{tool.name} has been installed.")
+    else:
+        print(f"Updating {tool.name}.")
+        command = f"{tool.upgrade_with} {tool.name} {tool.install_args}"
+        subprocess.run(command, shell=True, check=True)
+
+# Sort tools by priority
+tools_to_install.sort(key=lambda x: x.priority)
+
+# Install each tool
+for tool in tools_to_install:
+    install_tool(tool)
 
 directories_to_add = [
     # Visual Studio 2019 Windows SDK required for building C++ projects: "mt.exe", "rd.exe", etc

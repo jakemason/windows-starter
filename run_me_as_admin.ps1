@@ -178,6 +178,12 @@ $registryEntriesToSet = @(
   },
   @{
     RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+    EntryName = "TaskbarCopilot"
+    EntryValue = 0
+    Message = "Removed Copilot from the taskbar."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
     EntryName = "TaskbarDa"
     EntryValue = 0
     Message = "Disabled Widgets in the taskbar."

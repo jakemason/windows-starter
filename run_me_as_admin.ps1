@@ -271,4 +271,4 @@ Start-Process explorer
 Write-Output "Done."
 Write-Warning "You must either restart your machine or sign-out and back in for some of these changes to take effect. This is a requirement by Windows, there's no way around it."
 
-python start.py
+python install_apps.py

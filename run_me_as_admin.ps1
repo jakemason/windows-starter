@@ -177,6 +177,12 @@ $registryEntriesToSet = @(
     Message = "Disabled Windows Copilot."
   },
   @{
+    RegistryPath = "HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot"
+    EntryName = "TurnOffWindowsCopilot"
+    EntryValue = 1
+    Message = "Disabled Windows Copilot."
+  },
+  @{
     RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
     EntryName = "TaskbarCopilot"
     EntryValue = 0
@@ -262,6 +268,31 @@ foreach ($entry in $registryEntriesToSet) {
 
 # Check and install PowerToys if not already installed
 winget install Microsoft.PowerToys --source winget
+
+# Clean everything off of the desktop
+$desktopPath = [System.Environment]::GetFolderPath('Desktop')
+$desktopItems = Get-ChildItem -Path $desktopPath
+foreach ($item in $desktopItems) {
+    try {
+        Remove-Item -Path $item.FullName -Recurse -Force -ErrorAction Stop
+        Write-Output "Deleted: $($item.FullName)"
+    } catch {
+        Write-Output "Failed to delete: $($item.FullName). Error: $_"
+    }
+}
+
+# Clear everything pinned to the taskbar
+$taskbarPinnedItemsPath = "$env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
+$taskbarItems = Get-ChildItem -Path $taskbarPinnedItemsPath -Filter '*.lnk'
+foreach ($item in $taskbarItems) {
+    try {
+        Remove-Item -Path $item.FullName -Force -ErrorAction Stop
+        Write-Output "Deleted taskbar shortcut: $($item.FullName)"
+    } catch {
+        Write-Output "Failed to delete taskbar shortcut: $($item.FullName). Error: $_"
+    }
+}
+
 
 # Refresh the desktop to apply the changes
 Write-Output "Restarting explorer to apply new settings."

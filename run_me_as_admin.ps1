@@ -282,16 +282,39 @@ foreach ($item in $desktopItems) {
 }
 
 # Clear everything pinned to the taskbar
-$taskbarPinnedItemsPath = "$env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
-$taskbarItems = Get-ChildItem -Path $taskbarPinnedItemsPath -Filter '*.lnk'
+function Unpin-TaskbarItem {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$AppName
+    )
+
+    $shell = New-Object -ComObject Shell.Application
+    $folder = $shell.Namespace(0x10) # CSIDL_APPDATA
+    $taskbarFolder = $folder.ParseName("Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar")
+
+    $items = $taskbarFolder.Items()
+
+    foreach ($item in $items) {
+        if ($item.Name -like "*$AppName*") {
+            $item.InvokeVerb("unpin from taskbar")
+            Write-Output "Unpinned $AppName from taskbar."
+        }
+    }
+}
+
+# Unpin all taskbar items
+$appDataPath = [System.Environment]::GetFolderPath('ApplicationData')
+$taskbarPath = Join-Path -Path $appDataPath -ChildPath "Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
+$taskbarItems = Get-ChildItem -Path $taskbarPath -Filter '*.lnk'
 foreach ($item in $taskbarItems) {
     try {
         Remove-Item -Path $item.FullName -Force -ErrorAction Stop
-        Write-Output "Deleted taskbar shortcut: $($item.FullName)"
+        Write-Output "Removed taskbar shortcut: $($item.FullName)"
     } catch {
-        Write-Output "Failed to delete taskbar shortcut: $($item.FullName). Error: $_"
+        Write-Output "Failed to remove taskbar shortcut: $($item.FullName). Error: $_"
     }
 }
+Write-Output "All taskbar items have been removed."
 
 
 # Refresh the desktop to apply the changes

@@ -205,6 +205,54 @@ $registryEntriesToSet = @(
     EntryName = ""
     EntryValue = ""
     Message = "Enabled classic context menu in Windows 11."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+    EntryName = "SubscribedContent-338388Enabled"
+    EntryValue = 0
+    Message = "Disabled Windows Tips."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy"
+    EntryName = "LetAppsAccessLocation"
+    EntryValue = 0
+    Message = "Disabled location tracking."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo"
+    EntryName = "Enabled"
+    EntryValue = 0
+    Message = "Disabled Advertising ID."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\OneDrive"
+    EntryName = "DisableFileSyncNGSC"
+    EntryValue = 1
+    Message = "Disabled OneDrive."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+    EntryName = "SubscribedContent-338388Enabled"
+    EntryValue = 0
+    Message = "Disabled Windows Tips."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People"
+    EntryName = "PeopleBand"
+    EntryValue = 0
+    Message = "Disabled People icon on the taskbar."
+  },
+  @{
+    RegistryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"
+    EntryName = "PenWorkspaceButtonDesiredVisibility"
+    EntryValue = 0
+    Message = "Disabled Windows Ink Workspace."
+  },
+  @{
+    RegistryPath = "HKLM:\Software\Policies\Microsoft\Windows\DataCollection"
+    EntryName = "AllowTelemetry"
+    EntryValue = 0
+    Message = "Disabled Windows telemetry."
   }
 )
 
